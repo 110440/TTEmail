@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EmailDetailViewController" customModule="TT_Email" customModuleProvider="target">
+            <connections>
+                <outlet property="scrollView" destination="V2s-e3-wIx" id="6n4-t2-kTq"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="V2s-e3-wIx">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                </scrollView>
+                <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Pi9-Yu-I8w">
+                    <rect key="frame" x="0.0" y="524" width="320" height="44"/>
+                    <items>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="VQD-rE-Cij"/>
+                        <barButtonItem image="flag" style="done" id="m0q-qz-oD5">
+                            <connections>
+                                <action selector="flagTheMessage:" destination="-1" id="lm3-BG-EWg"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem width="42" style="plain" systemItem="fixedSpace" id="bCj-im-kGK"/>
+                        <barButtonItem image="delete" id="0h6-ac-pfA">
+                            <connections>
+                                <action selector="deleteTheMessage:" destination="-1" id="K7d-Cq-MVx"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem width="42" style="plain" systemItem="fixedSpace" id="s95-Jr-749"/>
+                        <barButtonItem image="system" id="avA-Xu-D7q">
+                            <connections>
+                                <action selector="answerTheMessage:" destination="-1" id="GeN-f2-9h7"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem width="42" style="plain" systemItem="fixedSpace" id="bDG-gA-uWj"/>
+                        <barButtonItem image="info" id="XmK-wb-4PF">
+                            <connections>
+                                <action selector="moreOperation:" destination="-1" id="N3r-Tx-8UR"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="qLx-A8-cM5"/>
+                    </items>
+                </toolbar>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="V2s-e3-wIx" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="0hj-Ea-bN6"/>
+                <constraint firstAttribute="bottom" secondItem="Pi9-Yu-I8w" secondAttribute="bottom" id="O3V-no-Kdh"/>
+                <constraint firstAttribute="trailing" secondItem="V2s-e3-wIx" secondAttribute="trailing" id="XcO-oc-zW7"/>
+                <constraint firstItem="Pi9-Yu-I8w" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="fNb-LV-goP"/>
+                <constraint firstAttribute="trailing" secondItem="Pi9-Yu-I8w" secondAttribute="trailing" id="h24-7u-vuD"/>
+                <constraint firstItem="V2s-e3-wIx" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="h6W-dE-CC3"/>
+                <constraint firstAttribute="bottom" secondItem="V2s-e3-wIx" secondAttribute="bottom" id="upD-eW-hcO"/>
+            </constraints>
+            <point key="canvasLocation" x="387" y="345"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="delete" width="21" height="21"/>
+        <image name="flag" width="24" height="29"/>
+        <image name="info" width="24" height="24"/>
+        <image name="system" width="24" height="24"/>
+    </resources>
+</document>
