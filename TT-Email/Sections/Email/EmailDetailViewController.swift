@@ -104,7 +104,8 @@ class EmailDetailViewController: UIViewController ,UIWebViewDelegate {
             
             //计算 scrollView contentSize
             self.setWebViewFrame()
-            self.scrollView.contentSize = CGSize(width: size.width, height: topViewHeight + self.webView.bounds.height )
+            let h = max(topViewHeight + self.webView.bounds.height, self.scrollView.bounds.size.height - 44)
+            self.scrollView.contentSize = CGSize(width: size.width, height:h)
             return
         }
         

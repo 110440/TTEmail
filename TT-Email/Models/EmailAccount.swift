@@ -48,12 +48,6 @@ struct EmailAccount {
         dic["SMTPHotname"] = self.SMTPHotname
         dic["SMTPPort"] = NSNumber(unsignedInt: self.SMTPPort)
         
-//        var folders = [NSMutableDictionary]()
-//        for folder in self.folders ?? [] {
-//            let data = folder.toDictionry()
-//            folders.append(data)
-//        }
-        
         dic["folders"] = self.folders
         return dic
     }

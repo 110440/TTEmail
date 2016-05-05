@@ -166,6 +166,11 @@ class IMAPSession {
                 // fetch message
                 let msgCount = UInt64(info!.messageCount)
                 print("messageCount:\(msgCount)")
+                if msgCount <= 0 {
+                    completion(error: nil, messages:[], range: NSRange(location:1,length:0) )
+                    return
+                }
+                
                 var length = num - 1
                 let start = msgCount >= length ? msgCount - length : 1
                 length = msgCount >= length ? length:msgCount-1

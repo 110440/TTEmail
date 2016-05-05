@@ -8,7 +8,7 @@
 
 import UIKit
 
-class EmailViewController: UITableViewController {
+class EmailViewController: UITableViewController ,MenuViewDeleaget{
     
     var messages = [EmailMessage]()
     var messagesOffset:UInt64 = 0
@@ -23,13 +23,20 @@ class EmailViewController: UITableViewController {
         return view
     }()
     
+    lazy var menu:MenuView = {
+        let w = self.view.bounds.width * 3.0/4.0
+        let menu = MenuView(w: w, h: self.view.bounds.height)
+        menu.delegate = self
+        return menu
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.tableView.tableFooterView = self.footView
         self.footView.addTarget(self, action: #selector(self.loadMore(_:)), forControlEvents: .TouchUpInside)
         
-        let leftButton = UIBarButtonItem(image: UIImage(named:"menu"), style:.Plain, target: self, action:#selector(EmailViewController.menu))
+        let leftButton = UIBarButtonItem(image: UIImage(named:"menu"), style:.Plain, target: self, action:#selector(EmailViewController.onMenu))
         self.navigationItem.leftBarButtonItem = leftButton
         
         let searchButton = UIBarButtonItem(image: UIImage(named: "search"), style: .Plain, target: self, action: #selector(self.search) )
@@ -44,16 +51,29 @@ class EmailViewController: UITableViewController {
         //
         self.navigationItem.title = "收件箱"
         
+        self.view.addSubview(self.menu)
+        
+        self.login()
+    }
+
+    func login(){
+        
+        //
         if let userName = APP.getCurLoginUserName(),let curAccount = APP.accountStore.getAccountForName(userName) {
+            
+            APP.curEmailAccount = curAccount
+            self.menu.reloadData()
+            
             // 本地数据
             let messages = APP.emailStore.getAllMessage(curAccount.username, folderName: APP.curFoldername )
-            self.messages += messages
+            self.messages = messages
             self.tableView.reloadData()
             
             print("正在登陆。。。")
             APP.loginForIMAP(curAccount, completion: { (error) in
-              
+                
                 if error == nil{
+                    self.menu.reloadData()
                     print("登陆成功")
                     APP.emailStore.getNewMessage(APP.curIMAPSession!, userName: APP.curEmailAccount!.username, folderName: APP.curFoldername, num: getMessageLenghtMaxNum, completion: { (error, msgs,range) in
                         
@@ -77,9 +97,10 @@ class EmailViewController: UITableViewController {
             })
         }
     }
-
-    func menu(){
-        
+    
+    
+    func onMenu(){
+        self.menu.showMenu()
     }
     func search(){
         
@@ -137,6 +158,50 @@ class EmailViewController: UITableViewController {
         self.navigationController?.pushViewController(detailVC, animated: true)
     }
 
+    //MARK: MenuView delegate
+    func numberOfSectionsForMenuView(view: MenuView) -> Int {
+        return 3
+    }
+    func numberOfRowsInSectionForMenuView(view: MenuView, section: Int) -> Int {
+        if section == 0{
+            return 1
+        }else if section == 2{
+            return 1
+        }
+        return APP.curEmailAccount?.folders?.count ?? 0
+    }
+    func menuView(view: MenuView, willShowCell cell: UITableViewCell, indexPath: NSIndexPath) {
+        if indexPath.section == 0{
+            cell.textLabel?.text = APP.curEmailAccount?.username ?? ""
+        }else if indexPath.section == 2{
+            cell.textLabel?.text = "增加账号"
+        }else{
+            cell.textLabel?.text = APP.curEmailAccount?.folders![indexPath.row]
+        }
+    }
+    
+    func menuView(view: MenuView, selectRowAtIndexPath indexPath: NSIndexPath) {
+        if indexPath.section == 2{
+            
+            let imapHostName = "imap-mail.outlook.com"
+            let imapPort:UInt32 = 993
+            let smtpHostName = "smtp-mail.outlook.com"
+            let smtpPort:UInt32 = 587
+            let userName = "sanjinshutest@hotmail.com"
+            let password = "sanjinshu110440"
+            
+            let emailAccount = EmailAccount(IMAPHotname: imapHostName, IMAPPort: imapPort, SMTPHotname: smtpHostName, SMTPPort: smtpPort, username: userName, password: password,folders:[])
+            
+            APP.accountStore.addAccount(emailAccount)
+            APP.setCurLoginUserName(userName)
+            self.login()
+        }else if indexPath.section == 1{
+            APP.curFoldername = APP.curEmailAccount!.folders![indexPath.row]
+            self.login()
+        }else{
+            print(APP.curEmailAccount?.username)
+        }
+    }
     
     /*
     // Override to support conditional editing of the table view.

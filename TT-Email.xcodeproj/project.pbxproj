@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		42D6EE8EC018F5A074CFAC58 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 918CDAEEBB1EF165AD3C8D7B /* libPods.a */; };
+		D429DD421CDAE65800759EAE /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D429DD411CDAE65800759EAE /* MenuView.swift */; };
 		D462BB361CD1DDBA00AEEC01 /* EmailMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D462BB351CD1DDBA00AEEC01 /* EmailMessage.swift */; };
 		D462BB381CD1DE2500AEEC01 /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = D462BB371CD1DE2500AEEC01 /* SwiftyJSON.swift */; };
 		D462BB3F1CD1E96300AEEC01 /* MeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D462BB3D1CD1E96300AEEC01 /* MeViewController.swift */; };
@@ -41,6 +42,7 @@
 		39DD0AB43DD36D26697A9EE6 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		918CDAEEBB1EF165AD3C8D7B /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA3C4C43A219332CBC8A5B31 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		D429DD411CDAE65800759EAE /* MenuView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
 		D462BB351CD1DDBA00AEEC01 /* EmailMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmailMessage.swift; sourceTree = "<group>"; };
 		D462BB371CD1DE2500AEEC01 /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyJSON.swift; sourceTree = "<group>"; };
 		D462BB3D1CD1E96300AEEC01 /* MeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MeViewController.swift; path = Me/MeViewController.swift; sourceTree = "<group>"; };
@@ -165,6 +167,7 @@
 		D4A3612B1CCE0FE500F761BB /* Utilites */ = {
 			isa = PBXGroup;
 			children = (
+				D429DD411CDAE65800759EAE /* MenuView.swift */,
 				D462BB371CD1DE2500AEEC01 /* SwiftyJSON.swift */,
 				D488247F1CCFB12700F1276F /* Utility.swift */,
 				D4C8150B1CD3298B002B41F6 /* Table.swift */,
@@ -368,6 +371,7 @@
 				D462BB3F1CD1E96300AEEC01 /* MeViewController.swift in Sources */,
 				D462BB361CD1DDBA00AEEC01 /* EmailMessage.swift in Sources */,
 				D462BB381CD1DE2500AEEC01 /* SwiftyJSON.swift in Sources */,
+				D429DD421CDAE65800759EAE /* MenuView.swift in Sources */,
 				D4A3612D1CCE101500F761BB /* App.swift in Sources */,
 				D4900FFF1CD06197002D86FD /* EmailDetailViewController.swift in Sources */,
 				D4C8150E1CD32FFC002B41F6 /* EmailStore.swift in Sources */,
