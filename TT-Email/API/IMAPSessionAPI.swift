@@ -54,7 +54,8 @@ class IMAPSessionAPI{
     static func getNewMessages(session:MCOIMAPSession,folder:String,totals:UInt64,num:UInt64,completion:(error:NSError?,messages:[MCOIMAPMessage]?,offset:UInt64)->Void)->MCOIMAPBaseOperation{
         
         var length = num - 1
-        let start = max(1, totals - length)
+        let start = totals > length ? (totals - length):1
+        
         length = totals > length ? length:totals-1
         
         print("messageIndexStart-lenght:\(start)-\(length)")

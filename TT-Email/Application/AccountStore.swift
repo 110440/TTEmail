@@ -20,22 +20,22 @@ class AccountStore{
         return store
     }()
     
-    func addAccount(account:EmailAccount){
+    func addAccount(account:Account){
         let accountDic = account.toDictionry()
         self.accountStore.putObject(accountDic, withId: account.username, intoTable: ACCOUNTTABLE)
     }
     
-    var allAccount:Array<EmailAccount> {
-        var allAccount = [EmailAccount]()
+    var allAccount:Array<Account> {
+        var allAccount = [Account]()
         let allItem = self.accountStore.getAllItemsFromTable(ACCOUNTTABLE)
         for item in allItem{
-            let emailAccount = EmailAccount.fromDictionry( item.itemObject as! NSDictionary )
+            let emailAccount = Account.fromDictionry( item.itemObject as! NSDictionary )
             allAccount.append(emailAccount)
         }
         return allAccount
     }
     
-    func getAccountForName(name:String)->EmailAccount?{
+    func getAccountForName(name:String)->Account?{
         for account in self.allAccount{
             if account.username == name{
                 return account

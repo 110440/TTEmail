@@ -8,7 +8,7 @@
 
 import Foundation
 
-private let GET_MSG_NUM:UInt64 = 10
+let GET_MSG_NUM:UInt64 = 10
 
 class MessageStore {
     
@@ -66,12 +66,40 @@ class MessageStore {
         return APP.curAccount!.IMAPSession
     }
     
+    //所有文件夹
+    func fetchAllFolders(session:MCOIMAPSession,completion:(error:NSError?,folders:[Folder]?)->Void)->MCOIMAPBaseOperation{
+        return IMAPSessionAPI.fetchAllFolders(session, completion: { (error, folders) in
+            if error == nil{
+                var folderArray = [Folder]()
+                for folderName in folders!{
+                    let f = Folder(name: folderName, count: 0)
+                    folderArray.append(f)
+                }
+                completion(error: nil, folders: folderArray)
+            }else{
+                completion(error: error, folders: nil)
+            }
+        })
+    }
+    
+    func setMessageCountForFolder(folder:String,count:UInt64){
+        APP.curAccount!.setMessageCountForFolder(folder, count: count)
+        APP.accountStore.addAccount(APP.curAccount!)
+    }
+    
     //文件夹邮件数
-    func getMessageCount(completion:(error:NSError?,count:UInt64)->Void)->MCOIMAPBaseOperation{
+    func getMessageCountFromNet(completion:(error:NSError?,count:UInt64)->Void)->MCOIMAPBaseOperation{
         let folder = APP.curFoldername
         return IMAPSessionAPI.getMessageCount(self.imapSession, folder: folder) { (error, count) in
+            if error == nil{
+                self.setMessageCountForFolder(APP.curFoldername, count: count)
+            }
             completion(error: error, count: count)
         }
+    }
+    
+    func getMessageCountFromLocal()->UInt64{
+        return APP.curAccount!.getMessageCountForFolder(APP.curFoldername)
     }
     
     // 获取最新 n msg 并存到本地
@@ -99,12 +127,14 @@ class MessageStore {
     }
     
     // 获取旧的一页,不保存在本地
-    func getNextPageMessage(session:MCOIMAPSession,offset:UInt64,completion:(error:NSError?,messages:[EmailMessage]?,offset:UInt64)->Void)->MCOIMAPBaseOperation?{
+    func getNextPageMessage(offset:UInt64,completion:(error:NSError?,messages:[EmailMessage]?,offset:UInt64)->Void)->MCOIMAPBaseOperation?{
         
         if offset <= 1 {
             completion(error: nil, messages: [] ,offset: 1)
             return nil
         }
+        
+        let session = self.imapSession
         
         let start = max(offset - GET_MSG_NUM, 1)
         let lenght = offset - start - 1
@@ -193,7 +223,7 @@ class MessageStore {
                     self.putMessageBody(folder, body: data!, uid: uid)
                     let messageParser = MCOMessageParser(data: data)
                     //TODO:saync?
-                    completion(error: nil, body: messageParser.plainTextRendering())
+                    completion(error: nil, body: messageParser.plainTextBodyRendering())
                 }else{
                     completion(error: error, body: nil)
                 }
@@ -203,7 +233,7 @@ class MessageStore {
         }else{
             dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0), {
                 let messageParser = MCOMessageParser(data: bodyData)
-                completion(error: nil, body: messageParser.plainTextRendering())
+                completion(error: nil, body: messageParser.plainTextBodyRendering())
             })
         }
         return nil
@@ -227,4 +257,6 @@ class MessageStore {
             }
         }
     }
+    
+    
 }

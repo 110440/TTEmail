@@ -12,6 +12,7 @@ class EmailViewController: UITableViewController ,MenuViewDeleaget{
     
     var messages = [EmailMessage]()
     var messagesOffset:UInt64 = 0
+    var op:MCOIMAPBaseOperation?
     
     lazy var footView:UIButton = {
     
@@ -59,61 +60,77 @@ class EmailViewController: UITableViewController ,MenuViewDeleaget{
         self.navigationItem.title = "收件箱"
         
         self.view.addSubview(self.menu)
-        
-        self.login()
-    }
 
-    func login(){
-        
-        //
-        self.reflashContol.beginRefreshing()
-        if let userName = APP.getCurLoginUserName(),let curAccount = APP.accountStore.getAccountForName(userName) {
-            
-            APP.curEmailAccount = curAccount
-            self.menu.reloadData()
-            
-            // 本地数据
-            let messages = APP.emailStore.getAllMessage(curAccount.username, folderName: APP.curFoldername )
+        if let _ = APP.curAccount{
+            let messages = APP.messageStore.getAllMessage(APP.curFoldername)
             self.messages = messages
             self.tableView.reloadData()
             
-            print("正在登陆。。。")
-            APP.loginForIMAP(curAccount, completion: { (error) in
+            self.getNewMessages()
+        }
+    }
+    
+    func getNewMessages(){
+        self.op?.cancel()
+        
+        self.menu.reloadData()
+        
+        guard var _ = APP.curAccount else { return }
+        
+        self.reflashContol.beginRefreshing()
+        
+        let oldCount = APP.messageStore.getMessageCountFromLocal()
+        self.op = APP.messageStore.getMessageCountFromNet{ (error, newCount) in
+            
+            if error != nil {
+                Utility.showErrorMessage(error!)
+                self.reflashContol.endRefreshing()
+                return
+            }
+            
+            if newCount <= oldCount {
+                self.reflashContol.endRefreshing()
+                return
+            }
+            
+            self.op = APP.messageStore.getNewMessage(newCount, num: GET_MSG_NUM ) { (error, msgs, offset) in
                 
-                if error == nil{
-                    self.menu.reloadData()
-                    print("登陆成功")
-                    self.reflashContol.endRefreshing()
-                    APP.emailStore.getNewMessage(APP.curIMAPSession!, userName: APP.curEmailAccount!.username, folderName: APP.curFoldername, num: getMessageLenghtMaxNum, completion: { (error, msgs,range) in
-                        
-                        dispatch_async(dispatch_get_main_queue()){
-                            if error == nil{
-                                self.messages = msgs!
-                                self.messagesOffset = UInt64( range!.location )
-                                self.tableView.reloadData()
-                            }else{
-                                print(error)
-                            }
-                        }
-                    })
-                    
-                }else{
-                    print(error)
-                    
-                    var msg = "登陆失败"
-                    if error!.code == MCOErrorCode.Authentication.rawValue {
-                        msg = "登陆失败,请检查你的账号"
+                dispatch_async(dispatch_get_main_queue()){
+                    if error == nil{
+                        self.messages = msgs!
+                        self.messagesOffset = offset
+                        self.tableView.reloadData()
+                    }else{
+                        APP.messageStore.setMessageCountForFolder(APP.curFoldername, count: 0)
+                        Utility.showErrorMessage(error!)
                     }
-                    let aler = UIAlertView(title: "", message: msg, delegate: nil, cancelButtonTitle: "OK")
-                    aler.show()
+                    self.reflashContol.endRefreshing()
                 }
-                
-            })
+            }
+        }
+    }
+
+    func loadMore(sender:UIButton){
+        
+        if self.messagesOffset <= 1{
+            return
+        }
+        
+        APP.messageStore.getNextPageMessage(self.messagesOffset) { (error, messages, offset) in
+            if error == nil{
+                dispatch_async(dispatch_get_main_queue()){
+                    self.messages += messages!
+                    self.messagesOffset = offset
+                    self.tableView.reloadData()
+                }
+            }else{
+                Utility.showErrorMessage(error!)
+            }
         }
     }
     
     func reflash(c:UIRefreshControl){
-        print(c.refreshing)
+        self.getNewMessages()
     }
     
     func onMenu(){
@@ -125,28 +142,7 @@ class EmailViewController: UITableViewController ,MenuViewDeleaget{
     func newMsg(){
         
     }
-    func loadMore(sender:UIButton){
-        if self.messagesOffset > 1 {
-            var start = self.messagesOffset - getMessageLenghtMaxNum
-            start = start > 0 ? start:1
-            APP.emailStore.getNextPageMessage(APP.curIMAPSession, folder: APP.curFoldername, start:start, completion: { (error, messages) in
-                if error == nil{
-                    dispatch_async(dispatch_get_main_queue()){
-                        self.messages += messages!
-                        self.messagesOffset =  start
-                        self.tableView.reloadData()
-                    }
-                }else{
-                    print(error)
-                }
-            })
-        }
-    }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
 
     // MARK: - Table view data source
 
@@ -178,47 +174,35 @@ class EmailViewController: UITableViewController ,MenuViewDeleaget{
 
     //MARK: MenuView delegate
     func numberOfSectionsForMenuView(view: MenuView) -> Int {
-        return 3
+        return 2
     }
+    
     func numberOfRowsInSectionForMenuView(view: MenuView, section: Int) -> Int {
         if section == 0{
             return 1
-        }else if section == 2{
-            return 1
         }
-        return APP.curEmailAccount?.folders?.count ?? 0
+        return APP.curAccount?.folders?.count ?? 0
     }
+    
     func menuView(view: MenuView, willShowCell cell: UITableViewCell, indexPath: NSIndexPath) {
         if indexPath.section == 0{
-            cell.textLabel?.text = APP.curEmailAccount?.username ?? ""
-        }else if indexPath.section == 2{
-            cell.textLabel?.text = "增加账号"
+            cell.textLabel?.text = APP.curAccount?.username ?? ""
         }else{
-            let name = APP.curEmailAccount?.folders![indexPath.row]
+            let name = APP.curAccount?.folders?[indexPath.row].name
             cell.textLabel?.text = Utility.chineseFromEnglish(name!)
         }
     }
     
     func menuView(view: MenuView, selectRowAtIndexPath indexPath: NSIndexPath) {
-        if indexPath.section == 2{
-            
-            let imapHostName = "imap-mail.outlook.com"
-            let imapPort:UInt32 = 993
-            let smtpHostName = "smtp-mail.outlook.com"
-            let smtpPort:UInt32 = 587
-            let userName = "sanjinshutest@hotmail.com"
-            let password = "sanjinshu110"
-            
-            let emailAccount = EmailAccount(IMAPHotname: imapHostName, IMAPPort: imapPort, SMTPHotname: smtpHostName, SMTPPort: smtpPort, username: userName, password: password,folders:[])
-            
-            APP.accountStore.addAccount(emailAccount)
-            APP.setCurLoginUserName(userName)
-            self.login()
-        }else if indexPath.section == 1{
-            APP.curFoldername = APP.curEmailAccount!.folders![indexPath.row]
-            self.login()
+        if indexPath.section == 1{
+            APP.curFoldername = APP.curAccount!.folders![indexPath.row].name
+            let messages = APP.messageStore.getAllMessage(APP.curFoldername)
+            self.messages = messages
+            self.tableView.reloadData()
+            self.getNewMessages()
+            self.title =  Utility.chineseFromEnglish(APP.curFoldername)
         }else{
-            print(APP.curEmailAccount?.username)
+            print(APP.curAccount!.username)
         }
     }
     

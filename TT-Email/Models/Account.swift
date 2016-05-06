@@ -76,13 +76,13 @@ struct Account {
     }
     
     mutating func setMessageCountForFolder(folderName:String,count:UInt64){
-        let folders = self.folders ?? []
-        for var folder in folders {
+        guard let folders = self.folders else {return}
+        for (index,folder) in folders.enumerate() {
             if folder.name == folderName {
-                folder.count = count
+                self.folders![index].count = count
+                break
             }
         }
-        self.folders = folders
     }
     
 }

@@ -69,8 +69,7 @@ class EmailCell: UITableViewCell {
             }
         }
         
-        
-        self.getTextBodyOp = APP.emailStore.fetchMessageTextBody(APP.curIMAPSession, userName:APP.curEmailAccount!.username, folerName: APP.curFoldername, uid:data.uid, completion: {[weak self] (error, body) in
+        self.getTextBodyOp = APP.messageStore.fetchMessageTextBody(APP.curFoldername, uid: data.uid, completion: { [weak self] (error, body) in
             guard let wself = self else {return}
             if error == nil{
                 let text = Utility.removeURLForString(body ?? " " )
@@ -80,9 +79,7 @@ class EmailCell: UITableViewCell {
                     wself.contentLab.text = subStr
                 }
             }
-            
         })
-        
     }
     
 }

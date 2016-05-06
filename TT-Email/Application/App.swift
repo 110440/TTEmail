@@ -30,48 +30,18 @@ class App {
         return name
     }
 
-    
-    //////
-    
-    func loginForIMAP(account:EmailAccount, completion:(error:NSError?)->Void){
-        
-        if self.curIMAPSession != nil && self.curEmailAccount?.username == account.username {
-            completion(error: nil)
-            return
-        }
-        IMAPSession.sessionWithLogin(account.IMAPHotname, port:account.IMAPPort, username: account.username, password: account.password) { (error, session, folders) in
-            if let e = error{
-                completion(error: e)
-            }else{
-                self.curIMAPSession = session
-                self.curEmailAccount = account
-                self.curEmailAccount?.folders = folders
-                self.curFoldername = "INBOX"
-                self.accountStore.addAccount(self.curEmailAccount!)
-            
-                completion(error: nil)
-            }
-        }
-    }
-    
-    
-    func updateFolderForCurAccount(folder:Folder){
-        
-    }
-    
-    var curEmailAccount:EmailAccount?
-    var curIMAPSession:IMAPSession?
     var curFoldername = "INBOX"
-    
     var curAccount:Account?
-    
-    var emailStore:EmailStore = {
-        let store = EmailStore()
+
+    var messageStore:MessageStore  = {
+        let store = MessageStore()
         return store
     }()
     
     init() {
         
-        
+        if let userName = self.getCurLoginUserName(),let curAccount = self.accountStore.getAccountForName(userName) {
+            self.curAccount = curAccount
+        }
     }
 }

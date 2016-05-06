@@ -12,12 +12,6 @@ class MeViewController: UITableViewController {
         
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
         
         self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
     }
@@ -42,12 +36,52 @@ class MeViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath)
-        cell.textLabel?.text = "设置"
+        cell.textLabel?.text = "添加账号"
         return cell
     }
  
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if indexPath.row == 0{
+            
+            let imapHostName = "imap-mail.outlook.com"
+            let imapPort:UInt32 = 993
+            let smtpHostName = "smtp-mail.outlook.com"
+            let smtpPort:UInt32 = 587
+            let userName = "sanjinshutest@hotmail.com"
+            let password = "sanjinshu110"
+            
+            var account = Account(IMAPHotname: imapHostName, IMAPPort: imapPort, SMTPHotname: smtpHostName, SMTPPort: smtpPort, username: userName, password: password, folders: [])
+            
+            let hud = MBProgressHUD.showHUDAddedTo(self.navigationController?.view, animated: true)
+            hud.labelText = "正在验证账号..."
+            
+            IMAPSessionAPI.checkAccount(account.IMAPSession, completion: { (error) in
+                
+                if error == nil {
+                    APP.messageStore.fetchAllFolders(account.IMAPSession, completion: { (error, folders) in
+                        if error == nil{
+                            
+                            account.folders = folders
+                            APP.accountStore.addAccount(account)
+                            APP.setCurLoginUserName(userName)
+                            APP.curAccount = account
+                            
+                            dispatch_async(dispatch_get_main_queue()){
+                            hud.labelText = "验证成功！"
+                            hud.hide(true, afterDelay: 1)
+                            }
+                            
+                        }else{
+                            Utility.showErrorMessage(error!)
+                        }
+                    })
+                    
+                }else{
+                    Utility.showErrorMessage(error!)
+                }
+            })
+            
+            
             
         }
     }

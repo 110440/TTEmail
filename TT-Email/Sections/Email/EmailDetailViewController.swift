@@ -77,7 +77,7 @@ class EmailDetailViewController: UIViewController ,UIWebViewDelegate {
         
         let uid = self.message!.uid
         
-        self.getHtmlOP = APP.emailStore.fetchMessageHtmlBody(APP.curIMAPSession, userName:APP.curEmailAccount!.username, folerName: APP.curFoldername, uid: uid, completion: {[weak self] (error, body) in
+        self.getHtmlOP = APP.messageStore.fetchMessageHtmlBody(APP.curFoldername, uid:uid, completion: {[weak self] (error, body) in
             guard let wself = self else{return}
             dispatch_async(dispatch_get_main_queue()){
                 if error == nil{
@@ -85,10 +85,12 @@ class EmailDetailViewController: UIViewController ,UIWebViewDelegate {
                     wself.body = body
                     wself.webView.loadHTMLString(body!, baseURL: nil)
                     wself.webView.hidden = true
+                }else{
+                    Utility.showErrorMessage(error!)
                 }
             }
         })
-        
+
     }
     
     deinit{
@@ -141,8 +143,8 @@ class EmailDetailViewController: UIViewController ,UIWebViewDelegate {
     }
     
     @IBAction func deleteTheMessage(sender: AnyObject) {
-        guard let session = APP.curIMAPSession else {return}
-        APP.emailStore.deleteMessage(session, userName: APP.curEmailAccount!.username, uid: self.message!.uid) { (error) in
+        
+        APP.messageStore.deleteMessage(APP.curAccount!.IMAPSession, uid: self.message!.uid) { (error) in
             if error == nil{
                 print("删除成功!!")
             }else{

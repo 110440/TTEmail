@@ -65,12 +65,15 @@ class Utility {
     }
     
     static func showErrorMessage(error:NSError){
-        if error.code == MCOErrorCode.Authentication.rawValue{
-            let msg = "连接错误，请检查你的账号设置！"
-            let alert = UIAlertView(title:nil, message: msg, delegate: nil, cancelButtonTitle: "OK")
-            alert.show()
-        }else{
-            print("error:\(error)")
+        
+        dispatch_async(dispatch_get_main_queue()){
+            if error.code == MCOErrorCode.Authentication.rawValue{
+                let msg = "连接错误，请检查你的账号设置！"
+                let alert = UIAlertView(title:nil, message: msg, delegate: nil, cancelButtonTitle: "OK")
+                alert.show()
+            }else{
+                print("error:\(error)")
+            }
         }
     }
     

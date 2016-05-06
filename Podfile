@@ -8,3 +8,4 @@ platform :ios, ‘8.0’
 
 pod 'mailcore2-ios'
 pod 'YTKKeyValueStore'
+pod 'MBProgressHUD', '~> 0.9.2'

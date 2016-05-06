@@ -20,7 +20,6 @@
 		D49010051CD0ACB3002D86FD /* TodoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D49010031CD0ACB3002D86FD /* TodoViewController.xib */; };
 		D49F97551CD8409C00ADCA84 /* Folder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D49F97541CD8409C00ADCA84 /* Folder.swift */; };
 		D4A3612D1CCE101500F761BB /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4A3612C1CCE101500F761BB /* App.swift */; };
-		D4A3612F1CCE106D00F761BB /* EmailAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4A3612E1CCE106D00F761BB /* EmailAPI.swift */; };
 		D4AD3E2F1CCF041A00BDDC23 /* FriendsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4AD3E2D1CCF041A00BDDC23 /* FriendsViewController.swift */; };
 		D4AD3E301CCF041A00BDDC23 /* FriendsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D4AD3E2E1CCF041A00BDDC23 /* FriendsViewController.xib */; };
 		D4AD3E331CCF044F00BDDC23 /* EmailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4AD3E311CCF044F00BDDC23 /* EmailViewController.swift */; };
@@ -30,7 +29,6 @@
 		D4AD3E3A1CCF19BA00BDDC23 /* EmailAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4AD3E391CCF19BA00BDDC23 /* EmailAccount.swift */; };
 		D4C8150A1CD3270F002B41F6 /* AccountStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C815091CD3270F002B41F6 /* AccountStore.swift */; };
 		D4C8150C1CD3298B002B41F6 /* Table.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C8150B1CD3298B002B41F6 /* Table.swift */; };
-		D4C8150E1CD32FFC002B41F6 /* EmailStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C8150D1CD32FFC002B41F6 /* EmailStore.swift */; };
 		D4CE195C1CCDADD10046F570 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CE195B1CCDADD10046F570 /* AppDelegate.swift */; };
 		D4CE195E1CCDADD10046F570 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CE195D1CCDADD10046F570 /* MainViewController.swift */; };
 		D4CE19611CCDADD10046F570 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D4CE195F1CCDADD10046F570 /* Main.storyboard */; };
@@ -57,7 +55,6 @@
 		D49010031CD0ACB3002D86FD /* TodoViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = TodoViewController.xib; path = Todo/TodoViewController.xib; sourceTree = "<group>"; };
 		D49F97541CD8409C00ADCA84 /* Folder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Folder.swift; sourceTree = "<group>"; };
 		D4A3612C1CCE101500F761BB /* App.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
-		D4A3612E1CCE106D00F761BB /* EmailAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmailAPI.swift; sourceTree = "<group>"; };
 		D4AD3E2D1CCF041A00BDDC23 /* FriendsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FriendsViewController.swift; path = Friends/FriendsViewController.swift; sourceTree = "<group>"; };
 		D4AD3E2E1CCF041A00BDDC23 /* FriendsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FriendsViewController.xib; path = Friends/FriendsViewController.xib; sourceTree = "<group>"; };
 		D4AD3E311CCF044F00BDDC23 /* EmailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EmailViewController.swift; path = Email/EmailViewController.swift; sourceTree = "<group>"; };
@@ -67,7 +64,6 @@
 		D4AD3E391CCF19BA00BDDC23 /* EmailAccount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmailAccount.swift; sourceTree = "<group>"; };
 		D4C815091CD3270F002B41F6 /* AccountStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountStore.swift; sourceTree = "<group>"; };
 		D4C8150B1CD3298B002B41F6 /* Table.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Table.swift; sourceTree = "<group>"; };
-		D4C8150D1CD32FFC002B41F6 /* EmailStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmailStore.swift; sourceTree = "<group>"; };
 		D4CE19581CCDADD10046F570 /* TT-Email.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "TT-Email.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4CE195B1CCDADD10046F570 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = ../AppDelegate.swift; sourceTree = "<group>"; };
 		D4CE195D1CCDADD10046F570 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MainViewController.swift; path = ../MainViewController.swift; sourceTree = "<group>"; };
@@ -131,7 +127,6 @@
 		D4A361271CCE0FE400F761BB /* API */ = {
 			isa = PBXGroup;
 			children = (
-				D4A3612E1CCE106D00F761BB /* EmailAPI.swift */,
 				D4DEA36E1CDC731B00E92148 /* IMAPSessionAPI.swift */,
 			);
 			path = API;
@@ -145,7 +140,6 @@
 				D4CE195B1CCDADD10046F570 /* AppDelegate.swift */,
 				D4A3612C1CCE101500F761BB /* App.swift */,
 				D4C815091CD3270F002B41F6 /* AccountStore.swift */,
-				D4C8150D1CD32FFC002B41F6 /* EmailStore.swift */,
 				D4DEA3721CDC86AE00E92148 /* MessageStore.swift */,
 			);
 			path = Application;
@@ -383,7 +377,6 @@
 				D429DD421CDAE65800759EAE /* MenuView.swift in Sources */,
 				D4A3612D1CCE101500F761BB /* App.swift in Sources */,
 				D4900FFF1CD06197002D86FD /* EmailDetailViewController.swift in Sources */,
-				D4C8150E1CD32FFC002B41F6 /* EmailStore.swift in Sources */,
 				D4AD3E371CCF05AD00BDDC23 /* EmailCell.swift in Sources */,
 				D4C8150A1CD3270F002B41F6 /* AccountStore.swift in Sources */,
 				D4CE195E1CCDADD10046F570 /* MainViewController.swift in Sources */,
@@ -397,7 +390,6 @@
 				D4DEA3731CDC86AE00E92148 /* MessageStore.swift in Sources */,
 				D4AD3E3A1CCF19BA00BDDC23 /* EmailAccount.swift in Sources */,
 				D4DEA3711CDC82A900E92148 /* Account.swift in Sources */,
-				D4A3612F1CCE106D00F761BB /* EmailAPI.swift in Sources */,
 				D49F97551CD8409C00ADCA84 /* Folder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
