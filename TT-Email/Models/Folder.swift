@@ -12,7 +12,7 @@ struct Folder {
     let name:String
     var count:UInt64
     
-    static func fromDictionry(dic:NSDictionary)->Folder{
+    static func fromDictionry(dic:NSMutableDictionary)->Folder{
         let name = dic["name"] as! String
         let count = (dic["count"] as? NSNumber)?.unsignedLongLongValue ?? 0
         return Folder(name: name , count: count)

@@ -36,6 +36,9 @@
 		D4CE19611CCDADD10046F570 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D4CE195F1CCDADD10046F570 /* Main.storyboard */; };
 		D4CE19631CCDADD10046F570 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D4CE19621CCDADD10046F570 /* Assets.xcassets */; };
 		D4CE19661CCDADD10046F570 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D4CE19641CCDADD10046F570 /* LaunchScreen.storyboard */; };
+		D4DEA36F1CDC731B00E92148 /* IMAPSessionAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4DEA36E1CDC731B00E92148 /* IMAPSessionAPI.swift */; };
+		D4DEA3711CDC82A900E92148 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4DEA3701CDC82A900E92148 /* Account.swift */; };
+		D4DEA3731CDC86AE00E92148 /* MessageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4DEA3721CDC86AE00E92148 /* MessageStore.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -73,6 +76,9 @@
 		D4CE19651CCDADD10046F570 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D4CE19671CCDADD10046F570 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D4CE196D1CCDB06F0046F570 /* TT-Email-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TT-Email-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
+		D4DEA36E1CDC731B00E92148 /* IMAPSessionAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IMAPSessionAPI.swift; sourceTree = "<group>"; };
+		D4DEA3701CDC82A900E92148 /* Account.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
+		D4DEA3721CDC86AE00E92148 /* MessageStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageStore.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -126,6 +132,7 @@
 			isa = PBXGroup;
 			children = (
 				D4A3612E1CCE106D00F761BB /* EmailAPI.swift */,
+				D4DEA36E1CDC731B00E92148 /* IMAPSessionAPI.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -139,6 +146,7 @@
 				D4A3612C1CCE101500F761BB /* App.swift */,
 				D4C815091CD3270F002B41F6 /* AccountStore.swift */,
 				D4C8150D1CD32FFC002B41F6 /* EmailStore.swift */,
+				D4DEA3721CDC86AE00E92148 /* MessageStore.swift */,
 			);
 			path = Application;
 			sourceTree = "<group>";
@@ -146,6 +154,7 @@
 		D4A361291CCE0FE500F761BB /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				D4DEA3701CDC82A900E92148 /* Account.swift */,
 				D4AD3E391CCF19BA00BDDC23 /* EmailAccount.swift */,
 				D462BB351CD1DDBA00AEEC01 /* EmailMessage.swift */,
 				D49F97541CD8409C00ADCA84 /* Folder.swift */,
@@ -384,7 +393,10 @@
 				D4C8150C1CD3298B002B41F6 /* Table.swift in Sources */,
 				D4AD3E331CCF044F00BDDC23 /* EmailViewController.swift in Sources */,
 				D48824801CCFB12700F1276F /* Utility.swift in Sources */,
+				D4DEA36F1CDC731B00E92148 /* IMAPSessionAPI.swift in Sources */,
+				D4DEA3731CDC86AE00E92148 /* MessageStore.swift in Sources */,
 				D4AD3E3A1CCF19BA00BDDC23 /* EmailAccount.swift in Sources */,
+				D4DEA3711CDC82A900E92148 /* Account.swift in Sources */,
 				D4A3612F1CCE106D00F761BB /* EmailAPI.swift in Sources */,
 				D49F97551CD8409C00ADCA84 /* Folder.swift in Sources */,
 			);

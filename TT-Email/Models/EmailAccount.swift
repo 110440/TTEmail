@@ -29,13 +29,6 @@ struct EmailAccount {
         let smtpPort = (dic["SMTPPort"] as! NSNumber).unsignedIntValue
         let folders = dic["folders"] as! [String]
         
-//        var folders = [Folder]()
-//        let foldersData = dic["folders"] as! [NSMutableDictionary]
-//        for folder in foldersData{
-//            let f = Folder.fromDictionry(folder)
-//            folders.append(f)
-//        }
-        
         return EmailAccount(IMAPHotname: imapHostname, IMAPPort: imapPort, SMTPHotname: smtpHostname, SMTPPort: smtpPort, username: username, password: password ,folders: folders)
     }
     

@@ -63,6 +63,8 @@ class App {
     var curIMAPSession:IMAPSession?
     var curFoldername = "INBOX"
     
+    var curAccount:Account?
+    
     var emailStore:EmailStore = {
         let store = EmailStore()
         return store
