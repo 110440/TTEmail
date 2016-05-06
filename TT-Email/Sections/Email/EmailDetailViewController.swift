@@ -141,6 +141,14 @@ class EmailDetailViewController: UIViewController ,UIWebViewDelegate {
     }
     
     @IBAction func deleteTheMessage(sender: AnyObject) {
+        guard let session = APP.curIMAPSession else {return}
+        APP.emailStore.deleteMessage(session, userName: APP.curEmailAccount!.username, uid: self.message!.uid) { (error) in
+            if error == nil{
+                print("删除成功!!")
+            }else{
+                print(error)
+            }
+        }
     }
 
     @IBAction func answerTheMessage(sender: AnyObject) {

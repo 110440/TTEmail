@@ -10,16 +10,18 @@ import Foundation
 
 struct Folder {
     let name:String
-    var offset:UInt64
+    var count:UInt64
     
     static func fromDictionry(dic:NSDictionary)->Folder{
         let name = dic["name"] as! String
-        return Folder(name: name, offset: 0)
+        let count = (dic["count"] as? NSNumber)?.unsignedLongLongValue ?? 0
+        return Folder(name: name , count: count)
     }
     
     func toDictionry()->NSMutableDictionary{
         let dic = NSMutableDictionary()
         dic["name"] = self.name
+        dic["count"] = NSNumber(unsignedLongLong: self.count)
         return dic
     }
 }

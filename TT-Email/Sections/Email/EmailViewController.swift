@@ -30,9 +30,16 @@ class EmailViewController: UITableViewController ,MenuViewDeleaget{
         return menu
     }()
     
+    lazy var reflashContol:UIRefreshControl = {
+        let c = UIRefreshControl()
+        c.addTarget(self , action: #selector(self.reflash(_:)), forControlEvents: .ValueChanged)
+        return c
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.tableView.addSubview(self.reflashContol)
         self.tableView.tableFooterView = self.footView
         self.footView.addTarget(self, action: #selector(self.loadMore(_:)), forControlEvents: .TouchUpInside)
         
@@ -59,6 +66,7 @@ class EmailViewController: UITableViewController ,MenuViewDeleaget{
     func login(){
         
         //
+        self.reflashContol.beginRefreshing()
         if let userName = APP.getCurLoginUserName(),let curAccount = APP.accountStore.getAccountForName(userName) {
             
             APP.curEmailAccount = curAccount
@@ -75,6 +83,7 @@ class EmailViewController: UITableViewController ,MenuViewDeleaget{
                 if error == nil{
                     self.menu.reloadData()
                     print("登陆成功")
+                    self.reflashContol.endRefreshing()
                     APP.emailStore.getNewMessage(APP.curIMAPSession!, userName: APP.curEmailAccount!.username, folderName: APP.curFoldername, num: getMessageLenghtMaxNum, completion: { (error, msgs,range) in
                         
                         dispatch_async(dispatch_get_main_queue()){
@@ -90,7 +99,12 @@ class EmailViewController: UITableViewController ,MenuViewDeleaget{
                     
                 }else{
                     print(error)
-                    let aler = UIAlertView(title: "", message: "登陆失败", delegate: nil, cancelButtonTitle: "OK")
+                    
+                    var msg = "登陆失败"
+                    if error!.code == MCOErrorCode.Authentication.rawValue {
+                        msg = "登陆失败,请检查你的账号"
+                    }
+                    let aler = UIAlertView(title: "", message: msg, delegate: nil, cancelButtonTitle: "OK")
                     aler.show()
                 }
                 
@@ -98,6 +112,9 @@ class EmailViewController: UITableViewController ,MenuViewDeleaget{
         }
     }
     
+    func reflash(c:UIRefreshControl){
+        print(c.refreshing)
+    }
     
     func onMenu(){
         self.menu.showMenu()
@@ -146,6 +163,7 @@ class EmailViewController: UITableViewController ,MenuViewDeleaget{
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("email", forIndexPath: indexPath) as! EmailCell
+        cell.selectionStyle = .None
         let data = self.messages[indexPath.row]
         cell.setData(data)
         return cell
@@ -176,7 +194,8 @@ class EmailViewController: UITableViewController ,MenuViewDeleaget{
         }else if indexPath.section == 2{
             cell.textLabel?.text = "增加账号"
         }else{
-            cell.textLabel?.text = APP.curEmailAccount?.folders![indexPath.row]
+            let name = APP.curEmailAccount?.folders![indexPath.row]
+            cell.textLabel?.text = Utility.chineseFromEnglish(name!)
         }
     }
     
@@ -188,7 +207,7 @@ class EmailViewController: UITableViewController ,MenuViewDeleaget{
             let smtpHostName = "smtp-mail.outlook.com"
             let smtpPort:UInt32 = 587
             let userName = "sanjinshutest@hotmail.com"
-            let password = "sanjinshu110440"
+            let password = "sanjinshu110"
             
             let emailAccount = EmailAccount(IMAPHotname: imapHostName, IMAPPort: imapPort, SMTPHotname: smtpHostName, SMTPPort: smtpPort, username: userName, password: password,folders:[])
             
@@ -203,6 +222,13 @@ class EmailViewController: UITableViewController ,MenuViewDeleaget{
         }
     }
     
+    func menuView(view: MenuView, titleForHeaderInSection section: Int) -> String? {
+        if section == 1{
+            return "文件夹"
+        }
+        return nil
+    }
+
     /*
     // Override to support conditional editing of the table view.
     override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {

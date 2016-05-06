@@ -215,7 +215,7 @@ class MenuView: UIView ,UITableViewDataSource ,UITableViewDelegate{
         if section == 0{
             return 0.1
         }
-        return 20
+        return 30
     }
     
     func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat{

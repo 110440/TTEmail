@@ -64,4 +64,30 @@ class Utility {
         return desStr
     }
     
+    static func chineseFromEnglish(string:String)->String{
+        let map = [
+            "Notes":"Notes",
+            "Drafts":"草稿箱",
+            "Outbox":"Outbox",
+            "Junk":"垃圾箱",
+            "INBOX":"收件箱",
+            "Sent":"已发送",
+            "Deleted":"已删除"
+        ]
+        return map[string] ?? string
+    }
+    
+    static func englishFromChinese(string:String)->String{
+        let map = [
+            "Notes":"Notes",
+            "草稿箱":"Drafts",
+            "Outbox":"Outbox",
+            "垃圾箱":"Junk",
+            "收件箱":"INBOX",
+            "已发送":"Sent",
+            "已删除":"Deleted"
+        ]
+        return map[string] ?? string
+    }
+    
 }

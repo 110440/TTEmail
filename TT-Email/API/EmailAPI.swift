@@ -236,7 +236,7 @@ class IMAPSession {
                         expungeOp?.start({ (error) in
                             completion(error: error)
                         })
-                        operation = flagsOp
+                        operation = expungeOp
                     }
                 })
                 operation = flagsOp

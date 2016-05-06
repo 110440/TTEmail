@@ -50,24 +50,8 @@ class EmailStore {
             self.updateMessage(userName, folderName: folderName, message: message, key: String(message.uid))
         }
         
-        
-//        var allMessage = self.getAllMessage(userName, folderName: folderName)
-//        allMessage = allMessage.sort{ $0.time > $1.time }
-//        let table = self.getMessageTableForFolder(folderName, userName: userName)
-//        table.clearTable()
-//        for message in allMessage{
-//            self.updateMessage(userName, folderName: folderName, message: message, key: String(message.uid))
-//        }
     }
     
-//    func getMessage(userName:String,folderName:String,key:String)->EmailMessage?{
-//        let table = self.getMessageTableForFolder(folderName, userName: userName)
-//        if let object = table.objectForKey(key){
-//            return EmailMessage(dic: object as! NSMutableDictionary)
-//        }else{
-//            return nil
-//        }
-//    }
 
     //
     func getAllMessage(userName:String,folderName:String)->[EmailMessage]{
@@ -198,4 +182,22 @@ class EmailStore {
         }
     }
     
+    func deleteMessage(imapSession:IMAPSession,userName:String, uid:UInt32,completion:(error:NSError?)->Void){
+        let fromFolder = APP.curFoldername
+        let toFolder = "Deleted"
+        
+        imapSession.moveMessage(UInt64(uid), fromFoldername: fromFolder, toFolername: toFolder) { (error) in
+            if error == nil{
+                let table = self.getMessageTableForFolder(fromFolder, userName: APP.curEmailAccount!.username)
+                //if let messageData = table.objectForKey(String(uid)){
+                    //let message = EmailMessage(dic: messageData as! NSMutableDictionary )
+                    //add to delete folder
+                //}
+                table.deleteBy(String(uid))
+                completion(error: nil)
+            }else{
+                completion(error: error)
+            }
+        }
+    }
 }
