@@ -12,78 +12,68 @@ class MeViewController: UITableViewController {
         
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        //self.hidesBottomBarWhenPushed = true
         self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        self.tableView.reloadData()
         // Dispose of any resources that can be recreated.
     }
 
+ 
     // MARK: - Table view data source
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 1
+        return 2
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 1
+        if section == 1{
+            return 1
+        }else{
+            return APP.accountStore.allAccount.count
+        }
     }
 
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath)
-        cell.textLabel?.text = "添加账号"
+        cell.selectionStyle = .None
+        if indexPath.section == 1 {
+            cell.textLabel?.text = "添加账号"
+        }else{
+            let account = APP.accountStore.allAccount[indexPath.row]
+            cell.textLabel?.text = account.username
+            if APP.curAccount?.username == account.username{
+                cell.accessoryType = .Checkmark
+            }else{
+                cell.accessoryType = .None
+            }
+        }
         return cell
     }
  
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if indexPath.row == 0{
-            
-            let imapHostName = "imap-mail.outlook.com"
-            let imapPort:UInt32 = 993
-            let smtpHostName = "smtp-mail.outlook.com"
-            let smtpPort:UInt32 = 587
-            let userName = "sanjinshutest@hotmail.com"
-            let password = "sanjinshu110"
-            
-            var account = Account(IMAPHotname: imapHostName, IMAPPort: imapPort, SMTPHotname: smtpHostName, SMTPPort: smtpPort, username: userName, password: password, folders: [])
-            
-            let hud = MBProgressHUD.showHUDAddedTo(self.navigationController?.view, animated: true)
-            hud.labelText = "正在验证账号..."
-            
-            IMAPSessionAPI.checkAccount(account.IMAPSession, completion: { (error) in
-                
-                if error == nil {
-                    APP.messageStore.fetchAllFolders(account.IMAPSession, completion: { (error, folders) in
-                        if error == nil{
-                            
-                            account.folders = folders
-                            APP.accountStore.addAccount(account)
-                            APP.setCurLoginUserName(userName)
-                            APP.curAccount = account
-                            
-                            dispatch_async(dispatch_get_main_queue()){
-                            hud.labelText = "验证成功！"
-                            hud.hide(true, afterDelay: 1)
-                            }
-                            
-                        }else{
-                            Utility.showErrorMessage(error!)
-                        }
-                    })
-                    
-                }else{
-                    Utility.showErrorMessage(error!)
-                }
-            })
-            
-            
-            
+        if indexPath.section == 1 {
+            let vc = AddAccountViewController(style: .Grouped)
+            self.navigationController?.pushViewController(vc, animated: true)
+        }else{
+            let account = APP.accountStore.allAccount[indexPath.row]
+            APP.setCurLoginUserName(account.username)
+            APP.curAccount = account
+            NSNotificationCenter.defaultCenter().postNotificationName("changeAccount", object: nil)
+            self.tabBarController?.selectedIndex = 0
         }
+    }
+    
+    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if section == 0 {
+            return "账号"
+        }
+        return nil
     }
 
     /*

@@ -8,14 +8,21 @@
 
 import UIKit
 
-class EmailViewController: UITableViewController ,MenuViewDeleaget{
+class EmailViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,MenuViewDeleaget{
     
     var messages = [EmailMessage]()
     var messagesOffset:UInt64 = 0
     var op:MCOIMAPBaseOperation?
     
-    lazy var footView:UIButton = {
+    lazy var tableView:UITableView = {
+        let view = UITableView(frame: self.view.bounds)
+        view.delegate = self
+        view.dataSource = self
+        view.registerNib(UINib(nibName: "EmailCell",bundle: nil) , forCellReuseIdentifier: "email")
+        return view
+    }()
     
+    lazy var footView:UIButton = {
         let view = UIButton(frame: CGRect(x: 0, y: 0, width: self.view.bounds.size.width , height: 40))
         view.layer.borderWidth = 0.5
         view.layer.borderColor = UIColor(white: 0.8, alpha: 0.5).CGColor
@@ -25,7 +32,7 @@ class EmailViewController: UITableViewController ,MenuViewDeleaget{
     }()
     
     lazy var menu:MenuView = {
-        let w = self.view.bounds.width * 3.0/4.0
+        let w = self.view.bounds.width * 2.0/3.0
         let menu = MenuView(w: w, h: self.view.bounds.height)
         menu.delegate = self
         return menu
@@ -39,10 +46,18 @@ class EmailViewController: UITableViewController ,MenuViewDeleaget{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationController?.navigationBar.translucent = false
+        self.edgesForExtendedLayout = .Bottom
         
+        self.view.addSubview(self.tableView)
         self.tableView.addSubview(self.reflashContol)
         self.tableView.tableFooterView = self.footView
+        self.tableView.rowHeight = 65
+        
         self.footView.addTarget(self, action: #selector(self.loadMore(_:)), forControlEvents: .TouchUpInside)
+        
+        self.view.addSubview(self.menu)
+        self.navigationItem.title = "收件箱"
         
         let leftButton = UIBarButtonItem(image: UIImage(named:"menu"), style:.Plain, target: self, action:#selector(EmailViewController.onMenu))
         self.navigationItem.leftBarButtonItem = leftButton
@@ -50,34 +65,47 @@ class EmailViewController: UITableViewController ,MenuViewDeleaget{
         let searchButton = UIBarButtonItem(image: UIImage(named: "search"), style: .Plain, target: self, action: #selector(self.search) )
         let newMsgButton = UIBarButtonItem(image: UIImage(named: "write"), style: .Plain, target: self, action: #selector(self.newMsg))
         self.navigationItem.rightBarButtonItems = [searchButton,newMsgButton]
-        
-        //
-        self.tableView.registerNib(UINib(nibName: "EmailCell",bundle: nil) , forCellReuseIdentifier: "email")
-        self.tableView.rowHeight = 65
-        //self.tableView.tableFooterView = UIView(frame:CGRectZero)
-        
-        //
-        self.navigationItem.title = "收件箱"
-        
-        self.view.addSubview(self.menu)
 
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.recveNotify), name: "changeAccount", object: nil)
+        
         if let _ = APP.curAccount{
-            let messages = APP.messageStore.getAllMessage(APP.curFoldername)
-            self.messages = messages
-            self.tableView.reloadData()
-            
+            self.showDataFromLocal()
             self.getNewMessages()
         }
     }
     
-    func getNewMessages(){
-        self.op?.cancel()
-        
+    func showDataFromLocal(){
+        let messages = APP.messageStore.getAllMessage(APP.curFoldername)
+        self.messages = messages
+        self.tableView.reloadData()
+        let count = APP.messageStore.getMessageCountFromLocal()
+        self.messagesOffset = count - UInt64(self.messages.count)
+    }
+    
+    deinit{
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
+    func recveNotify(){
+        self.reflashContol.endRefreshing()
+        self.showDataFromLocal()
+        self.getNewMessages()
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
         self.menu.reloadData()
+    }
+    
+    func getNewMessages(){
+        
+        self.op?.cancel()
         
         guard var _ = APP.curAccount else { return }
         
-        self.reflashContol.beginRefreshing()
+        if self.reflashContol.refreshing == false{
+            self.reflashContol.beginRefreshing()
+        }
         
         let oldCount = APP.messageStore.getMessageCountFromLocal()
         self.op = APP.messageStore.getMessageCountFromNet{ (error, newCount) in
@@ -101,7 +129,7 @@ class EmailViewController: UITableViewController ,MenuViewDeleaget{
                         self.messagesOffset = offset
                         self.tableView.reloadData()
                     }else{
-                        APP.messageStore.setMessageCountForFolder(APP.curFoldername, count: 0)
+                        APP.messageStore.setMessageCountForFolder(APP.curFoldername, count:oldCount)
                         Utility.showErrorMessage(error!)
                     }
                     self.reflashContol.endRefreshing()
@@ -146,18 +174,17 @@ class EmailViewController: UITableViewController ,MenuViewDeleaget{
 
     // MARK: - Table view data source
 
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         return self.messages.count
     }
 
-    
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("email", forIndexPath: indexPath) as! EmailCell
         cell.selectionStyle = .None
         let data = self.messages[indexPath.row]
@@ -165,7 +192,7 @@ class EmailViewController: UITableViewController ,MenuViewDeleaget{
         return cell
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let detailVC = EmailDetailViewController(nibName: "EmailDetailViewController", bundle: nil)
         detailVC.message = self.messages[indexPath.row]
         detailVC.hidesBottomBarWhenPushed = true

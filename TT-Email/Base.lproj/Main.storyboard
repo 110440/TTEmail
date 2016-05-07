@@ -10,7 +10,7 @@
             <objects>
                 <tabBarController automaticallyAdjustsScrollViewInsets="NO" hidesBottomBarWhenPushed="YES" id="pEy-Si-agH" customClass="MainViewController" customModule="TT_Email" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <tabBar key="tabBar" contentMode="scaleToFill" id="IUR-ET-oX1">
+                    <tabBar key="tabBar" contentMode="scaleToFill" translucent="NO" id="IUR-ET-oX1">
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </tabBar>

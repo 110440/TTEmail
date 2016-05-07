@@ -15,7 +15,7 @@ class MainViewController: UITabBarController {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.whiteColor()
         
-        let email = EmailViewController(nibName: "EmailViewController", bundle: nil)
+        let email = EmailViewController()
         email.title = "邮件"
         email.tabBarItem.image = UIImage(named: "envelope")
         let vc1 = UINavigationController(rootViewController: email)
