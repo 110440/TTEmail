@@ -212,7 +212,7 @@ class MessageStore {
             return op
             
         }else{
-            dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0), {
+            dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_DEFAULT.rawValue), 0), {
                 let messageParser = MCOMessageParser(data: bodyData)
                 completion(error: nil, body: messageParser.htmlBodyRendering())
             })

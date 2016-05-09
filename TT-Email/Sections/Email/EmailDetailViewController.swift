@@ -98,6 +98,7 @@ class EmailDetailViewController: UIViewController ,UIWebViewDelegate {
                     wself.webView.hidden = true
                 }else{
                     Utility.showErrorMessage(error!)
+                    self?.hud?.hide(true)
                 }
             }
         })
@@ -131,6 +132,11 @@ class EmailDetailViewController: UIViewController ,UIWebViewDelegate {
         self.isFinished = true
         self.webView.loadHTMLString(newHtml, baseURL: nil)
         self.webView.hidden = false
+    }
+    
+    func webView(webView: UIWebView, didFailLoadWithError error: NSError?) {
+        self.hud?.hide(true)
+        print(error)
     }
     
     //MARK:private

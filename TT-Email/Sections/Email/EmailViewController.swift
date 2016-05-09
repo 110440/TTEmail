@@ -44,8 +44,13 @@ class EmailViewController: UIViewController,UITableViewDelegate,UITableViewDataS
     }
     
     var footViewAnimate:UIView  {
-        let view = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
-        view.startAnimating()
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: self.view.bounds.size.width , height: 40))
+        view.layer.borderWidth = 0.5
+        view.layer.borderColor = UIColor(white: 0.8, alpha: 0.5).CGColor
+        let indicator = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
+        view.addSubview(indicator)
+        indicator.center = view.center
+        indicator.startAnimating()
         return view
     }
     
