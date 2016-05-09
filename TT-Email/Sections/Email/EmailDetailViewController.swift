@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MBProgressHUD
 
 private let size = UIScreen.mainScreen().bounds.size
 private let topViewHeight:CGFloat = 100
@@ -18,6 +19,14 @@ class EmailDetailViewController: UIViewController ,UIWebViewDelegate {
             scrollView.contentInset.bottom = 44
         }
     }
+    
+    lazy var animationView:UIActivityIndicatorView = {
+        let view = UIActivityIndicatorView(activityIndicatorStyle:.WhiteLarge)
+        view.startAnimating()
+        view.tintColor = UIColor.blueColor()
+        view.center = self.view.center
+        return view
+    }()
     
     lazy var topView:UIView = {
         
@@ -67,6 +76,7 @@ class EmailDetailViewController: UIViewController ,UIWebViewDelegate {
     var isFinished = false
     var body:String!
     var message:EmailMessage?
+    var hud:MBProgressHUD?
     
     override func viewDidLoad() {
         
@@ -75,8 +85,9 @@ class EmailDetailViewController: UIViewController ,UIWebViewDelegate {
         self.scrollView.addSubview(self.webView)
         self.scrollView.addSubview(self.topView)
         
-        let uid = self.message!.uid
+        self.hud = MBProgressHUD.showHUDAddedTo(self.navigationController?.view, animated: true)
         
+        let uid = self.message!.uid
         self.getHtmlOP = APP.messageStore.fetchMessageHtmlBody(APP.curFoldername, uid:uid, completion: {[weak self] (error, body) in
             guard let wself = self else{return}
             dispatch_async(dispatch_get_main_queue()){
@@ -108,6 +119,7 @@ class EmailDetailViewController: UIViewController ,UIWebViewDelegate {
             self.setWebViewFrame()
             let h = max(topViewHeight + self.webView.bounds.height, self.scrollView.bounds.size.height - 44)
             self.scrollView.contentSize = CGSize(width: size.width, height:h)
+            self.hud?.hide(true)
             return
         }
         

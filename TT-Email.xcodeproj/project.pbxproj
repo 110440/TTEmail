@@ -7,13 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		42D6EE8EC018F5A074CFAC58 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 918CDAEEBB1EF165AD3C8D7B /* libPods.a */; };
 		D429DD421CDAE65800759EAE /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D429DD411CDAE65800759EAE /* MenuView.swift */; };
 		D44302401CDD84D0004293F1 /* AddAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D443023F1CDD84D0004293F1 /* AddAccountViewController.swift */; };
 		D44302431CDD859F004293F1 /* AddAccountCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D44302411CDD859F004293F1 /* AddAccountCell.swift */; };
 		D44302441CDD859F004293F1 /* AddAccountCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D44302421CDD859F004293F1 /* AddAccountCell.xib */; };
 		D462BB361CD1DDBA00AEEC01 /* EmailMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D462BB351CD1DDBA00AEEC01 /* EmailMessage.swift */; };
-		D462BB381CD1DE2500AEEC01 /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = D462BB371CD1DE2500AEEC01 /* SwiftyJSON.swift */; };
 		D462BB3F1CD1E96300AEEC01 /* MeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D462BB3D1CD1E96300AEEC01 /* MeViewController.swift */; };
 		D462BB401CD1E96300AEEC01 /* MeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D462BB3E1CD1E96300AEEC01 /* MeViewController.xib */; };
 		D48824801CCFB12700F1276F /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = D488247F1CCFB12700F1276F /* Utility.swift */; };
@@ -39,18 +37,18 @@
 		D4DEA36F1CDC731B00E92148 /* IMAPSessionAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4DEA36E1CDC731B00E92148 /* IMAPSessionAPI.swift */; };
 		D4DEA3711CDC82A900E92148 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4DEA3701CDC82A900E92148 /* Account.swift */; };
 		D4DEA3731CDC86AE00E92148 /* MessageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4DEA3721CDC86AE00E92148 /* MessageStore.swift */; };
+		DDEC96E7CD8489FED1DA10BB /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62ABAB7BD8004F7CAE2015BC /* Pods.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		39DD0AB43DD36D26697A9EE6 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
-		918CDAEEBB1EF165AD3C8D7B /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		62ABAB7BD8004F7CAE2015BC /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA3C4C43A219332CBC8A5B31 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		D429DD411CDAE65800759EAE /* MenuView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
 		D443023F1CDD84D0004293F1 /* AddAccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AddAccountViewController.swift; path = Me/AddAccountViewController.swift; sourceTree = "<group>"; };
 		D44302411CDD859F004293F1 /* AddAccountCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AddAccountCell.swift; path = Me/AddAccountCell.swift; sourceTree = "<group>"; };
 		D44302421CDD859F004293F1 /* AddAccountCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AddAccountCell.xib; path = Me/AddAccountCell.xib; sourceTree = "<group>"; };
 		D462BB351CD1DDBA00AEEC01 /* EmailMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmailMessage.swift; sourceTree = "<group>"; };
-		D462BB371CD1DE2500AEEC01 /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyJSON.swift; sourceTree = "<group>"; };
 		D462BB3D1CD1E96300AEEC01 /* MeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MeViewController.swift; path = Me/MeViewController.swift; sourceTree = "<group>"; };
 		D462BB3E1CD1E96300AEEC01 /* MeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MeViewController.xib; path = Me/MeViewController.xib; sourceTree = "<group>"; };
 		D488247F1CCFB12700F1276F /* Utility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
@@ -86,7 +84,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				42D6EE8EC018F5A074CFAC58 /* libPods.a in Frameworks */,
+				DDEC96E7CD8489FED1DA10BB /* Pods.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -105,7 +103,7 @@
 		6E2F6C1F83A6AF9E01B7ABB3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				918CDAEEBB1EF165AD3C8D7B /* libPods.a */,
+				62ABAB7BD8004F7CAE2015BC /* Pods.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -175,7 +173,6 @@
 			isa = PBXGroup;
 			children = (
 				D429DD411CDAE65800759EAE /* MenuView.swift */,
-				D462BB371CD1DE2500AEEC01 /* SwiftyJSON.swift */,
 				D488247F1CCFB12700F1276F /* Utility.swift */,
 				D4C8150B1CD3298B002B41F6 /* Table.swift */,
 			);
@@ -380,7 +377,6 @@
 				D462BB3F1CD1E96300AEEC01 /* MeViewController.swift in Sources */,
 				D44302401CDD84D0004293F1 /* AddAccountViewController.swift in Sources */,
 				D462BB361CD1DDBA00AEEC01 /* EmailMessage.swift in Sources */,
-				D462BB381CD1DE2500AEEC01 /* SwiftyJSON.swift in Sources */,
 				D429DD421CDAE65800759EAE /* MenuView.swift in Sources */,
 				D4A3612D1CCE101500F761BB /* App.swift in Sources */,
 				D4900FFF1CD06197002D86FD /* EmailDetailViewController.swift in Sources */,

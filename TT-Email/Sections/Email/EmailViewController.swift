@@ -7,6 +7,9 @@
 //
 
 import UIKit
+import SnapKit
+
+private let titleFont =  UIFont.boldSystemFontOfSize(17)
 
 class EmailViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,MenuViewDeleaget{
     
@@ -18,18 +21,33 @@ class EmailViewController: UIViewController,UITableViewDelegate,UITableViewDataS
         let view = UITableView(frame: self.view.bounds)
         view.delegate = self
         view.dataSource = self
+        view.rowHeight = 65
         view.registerNib(UINib(nibName: "EmailCell",bundle: nil) , forCellReuseIdentifier: "email")
+        self.view.addSubview(view)
+        view.snp_makeConstraints { (make) in
+            make.left.equalTo(self.view)
+            make.right.equalTo(self.view)
+            make.top.equalTo(self.view)
+            make.bottom.equalTo(self.view)
+        }
         return view
     }()
     
-    lazy var footView:UIButton = {
+    var footViewStatic:UIButton {
         let view = UIButton(frame: CGRect(x: 0, y: 0, width: self.view.bounds.size.width , height: 40))
         view.layer.borderWidth = 0.5
         view.layer.borderColor = UIColor(white: 0.8, alpha: 0.5).CGColor
         view.setTitle("加载更多...", forState: .Normal)
         view.setTitleColor(UIColor.lightGrayColor(), forState: .Normal)
+        view.addTarget(self, action: #selector(self.loadMore(_:)), forControlEvents: .TouchUpInside)
         return view
-    }()
+    }
+    
+    var footViewAnimate:UIView  {
+        let view = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
+        view.startAnimating()
+        return view
+    }
     
     lazy var menu:MenuView = {
         let w = self.view.bounds.width * 2.0/3.0
@@ -38,8 +56,22 @@ class EmailViewController: UIViewController,UITableViewDelegate,UITableViewDataS
         return menu
     }()
     
+    lazy var navigationTitleView:UIView = {
+        
+        let title = UILabel()
+        title.font = titleFont
+        title.sizeToFit()
+
+        let indecator = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
+        title.addSubview(indecator)
+        indecator.hidden = true
+        indecator.tag = 123
+        return title
+    }()
+    
     lazy var reflashContol:UIRefreshControl = {
         let c = UIRefreshControl()
+        c.backgroundColor = UIColor.whiteColor()
         c.addTarget(self , action: #selector(self.reflash(_:)), forControlEvents: .ValueChanged)
         return c
     }()
@@ -47,17 +79,14 @@ class EmailViewController: UIViewController,UITableViewDelegate,UITableViewDataS
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.navigationBar.translucent = false
-        self.edgesForExtendedLayout = .Bottom
         
-        self.view.addSubview(self.tableView)
         self.tableView.addSubview(self.reflashContol)
-        self.tableView.tableFooterView = self.footView
-        self.tableView.rowHeight = 65
-        
-        self.footView.addTarget(self, action: #selector(self.loadMore(_:)), forControlEvents: .TouchUpInside)
+        self.tableView.tableFooterView = self.footViewStatic
         
         self.view.addSubview(self.menu)
-        self.navigationItem.title = "收件箱"
+        //self.navigationItem.title = "收件箱"
+        self.navigationItem.titleView = self.navigationTitleView
+        self.setTitle("收件箱")
         
         let leftButton = UIBarButtonItem(image: UIImage(named:"menu"), style:.Plain, target: self, action:#selector(EmailViewController.onMenu))
         self.navigationItem.leftBarButtonItem = leftButton
@@ -66,11 +95,10 @@ class EmailViewController: UIViewController,UITableViewDelegate,UITableViewDataS
         let newMsgButton = UIBarButtonItem(image: UIImage(named: "write"), style: .Plain, target: self, action: #selector(self.newMsg))
         self.navigationItem.rightBarButtonItems = [searchButton,newMsgButton]
 
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.recveNotify), name: "changeAccount", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.updateTableView), name: "changeAccount", object: nil)
         
         if let _ = APP.curAccount{
-            self.showDataFromLocal()
-            self.getNewMessages()
+            self.updateTableView()
         }
     }
     
@@ -86,9 +114,10 @@ class EmailViewController: UIViewController,UITableViewDelegate,UITableViewDataS
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
-    func recveNotify(){
+    func updateTableView(){
         self.reflashContol.endRefreshing()
         self.showDataFromLocal()
+        self.startReflashAnimation()
         self.getNewMessages()
     }
     
@@ -97,15 +126,30 @@ class EmailViewController: UIViewController,UITableViewDelegate,UITableViewDataS
         self.menu.reloadData()
     }
     
+    private func setTitle(title:String){
+        let titleLab = self.navigationTitleView as! UILabel
+        titleLab.text = title
+        titleLab.sizeToFit()
+        
+        let indecator = self.navigationTitleView.viewWithTag(123)
+        let w = title.widthForFont(titleFont)
+        indecator?.frame.origin.x = CGFloat(w+2)
+    }
+    private func startReflashAnimation(){
+        let indecator = self.navigationTitleView.viewWithTag(123) as! UIActivityIndicatorView
+        indecator.hidden = false
+        indecator.startAnimating()
+    }
+    
+    private func stopReflashAnimation(){
+        let indecator = self.navigationTitleView.viewWithTag(123) as! UIActivityIndicatorView
+        indecator.hidden = true
+        indecator.stopAnimating()
+    }
+    
     func getNewMessages(){
         
         self.op?.cancel()
-        
-        guard var _ = APP.curAccount else { return }
-        
-        if self.reflashContol.refreshing == false{
-            self.reflashContol.beginRefreshing()
-        }
         
         let oldCount = APP.messageStore.getMessageCountFromLocal()
         self.op = APP.messageStore.getMessageCountFromNet{ (error, newCount) in
@@ -113,11 +157,13 @@ class EmailViewController: UIViewController,UITableViewDelegate,UITableViewDataS
             if error != nil {
                 Utility.showErrorMessage(error!)
                 self.reflashContol.endRefreshing()
+                self.stopReflashAnimation()
                 return
             }
             
             if newCount <= oldCount {
                 self.reflashContol.endRefreshing()
+                self.stopReflashAnimation()
                 return
             }
             
@@ -133,6 +179,7 @@ class EmailViewController: UIViewController,UITableViewDelegate,UITableViewDataS
                         Utility.showErrorMessage(error!)
                     }
                     self.reflashContol.endRefreshing()
+                    self.stopReflashAnimation()
                 }
             }
         }
@@ -144,6 +191,8 @@ class EmailViewController: UIViewController,UITableViewDelegate,UITableViewDataS
             return
         }
         
+        self.tableView.tableFooterView = self.footViewAnimate
+        
         APP.messageStore.getNextPageMessage(self.messagesOffset) { (error, messages, offset) in
             if error == nil{
                 dispatch_async(dispatch_get_main_queue()){
@@ -154,10 +203,12 @@ class EmailViewController: UIViewController,UITableViewDelegate,UITableViewDataS
             }else{
                 Utility.showErrorMessage(error!)
             }
+            self.tableView.tableFooterView = self.footViewStatic
         }
     }
     
     func reflash(c:UIRefreshControl){
+        self.stopReflashAnimation()
         self.getNewMessages()
     }
     
@@ -223,11 +274,10 @@ class EmailViewController: UIViewController,UITableViewDelegate,UITableViewDataS
     func menuView(view: MenuView, selectRowAtIndexPath indexPath: NSIndexPath) {
         if indexPath.section == 1{
             APP.curFoldername = APP.curAccount!.folders![indexPath.row].name
-            let messages = APP.messageStore.getAllMessage(APP.curFoldername)
-            self.messages = messages
-            self.tableView.reloadData()
-            self.getNewMessages()
-            self.title =  Utility.chineseFromEnglish(APP.curFoldername)
+            let title =  Utility.chineseFromEnglish(APP.curFoldername)
+            self.setTitle(title)
+            
+            self.updateTableView()
         }else{
             print(APP.curAccount!.username)
         }

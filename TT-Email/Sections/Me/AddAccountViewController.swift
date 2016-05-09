@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MBProgressHUD
 
 private let titleMap = [
     ["账    号","密    码"],

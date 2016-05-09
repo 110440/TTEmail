@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import YTKKeyValueStore
 
 private let ACCOUNTSTORE = "accountStore_DB"
 private let ACCOUNTTABLE = "account_table"

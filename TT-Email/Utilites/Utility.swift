@@ -38,6 +38,11 @@ extension String{
         let size = self.sizeForFont(font, size: CGSize(width: CGFloat(width), height: CGFloat(HUGE) ), lineBreakMode: NSLineBreakMode.ByWordWrapping)
         return Float(size.height)
     }
+    
+    func widthForFont(font:UIFont)->Float{
+        let size = self.sizeForFont(font, size: CGSize(width: CGFloat(HUGE), height: CGFloat(HUGE) ), lineBreakMode: NSLineBreakMode.ByWordWrapping)
+        return Float(size.width)
+    }
 }
 
 class Utility {

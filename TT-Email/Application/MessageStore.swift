@@ -7,6 +7,8 @@
 //
 
 import Foundation
+import YTKKeyValueStore
+
 
 let GET_MSG_NUM:UInt64 = 10
 
@@ -38,6 +40,11 @@ class MessageStore {
         table.putObject(dic, key:String(message.uid) )
     }
     
+    func deleteMessage(folder:String,uid:UInt32){
+        let table = self.getMessageTableForFolder(folder)
+        table.deleteBy(String(uid))
+    }
+    
     //只保存最新几条
     func putMessages(folder:String,messages:[EmailMessage]){
         if messages.count < 0 {return}
@@ -55,6 +62,7 @@ class MessageStore {
             if !isExist{
                 // 清理body
                 self.deleteMessageBody(folder, uid: oldMessage.uid)
+                self.deleteMessage(folder,uid: oldMessage.uid)
             }
         }
         for message in messages{
