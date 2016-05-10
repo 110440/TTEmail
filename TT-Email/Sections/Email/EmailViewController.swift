@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MBProgressHUD
 import SnapKit
 
 private let titleFont =  UIFont.boldSystemFontOfSize(17)
@@ -193,6 +194,10 @@ class EmailViewController: UIViewController,UITableViewDelegate,UITableViewDataS
     func loadMore(sender:UIButton){
         
         if self.messagesOffset <= 1{
+            let hud = MBProgressHUD.showHUDAddedTo(self.view, animated: false)
+            hud.labelText = "没有更多邮件.."
+            hud.mode = .Text
+            hud.hide(true, afterDelay: 0.5)
             return
         }
         
@@ -250,18 +255,33 @@ class EmailViewController: UIViewController,UITableViewDelegate,UITableViewDataS
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let detailVC = EmailDetailViewController(nibName: "EmailDetailViewController", bundle: nil)
-        detailVC.message = self.messages[indexPath.row]
+        let message = self.messages[indexPath.row]
+        
+        //setRead
+        if message.readed <= 0{
+            APP.messageStore.setMessageReaded(message.uid, readed: true, completion: { (error) in
+                if error == nil{
+                    message.readed = 1
+                    APP.messageStore.updateMessage(APP.curFoldername, message: message)
+                }
+            })
+        }
+        
+        detailVC.message = message
         detailVC.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(detailVC, animated: true)
+        message.readed = 1
+        let cell = tableView.cellForRowAtIndexPath(indexPath) as! EmailCell
+        cell.setData(message)
     }
 
     //MARK: MenuView delegate
     func numberOfSectionsForMenuView(view: MenuView) -> Int {
-        return 2
+        return 3
     }
     
     func numberOfRowsInSectionForMenuView(view: MenuView, section: Int) -> Int {
-        if section == 0{
+        if section == 0 || section == 1{
             return 1
         }
         return APP.curAccount?.folders?.count ?? 0
@@ -270,6 +290,9 @@ class EmailViewController: UIViewController,UITableViewDelegate,UITableViewDataS
     func menuView(view: MenuView, willShowCell cell: UITableViewCell, indexPath: NSIndexPath) {
         if indexPath.section == 0{
             cell.textLabel?.text = APP.curAccount?.username ?? ""
+        }else if indexPath.section == 1{
+            cell.textLabel?.text = "标记邮件"
+        
         }else{
             let name = APP.curAccount?.folders?[indexPath.row].name
             cell.textLabel?.text = Utility.chineseFromEnglish(name!)
@@ -277,19 +300,19 @@ class EmailViewController: UIViewController,UITableViewDelegate,UITableViewDataS
     }
     
     func menuView(view: MenuView, selectRowAtIndexPath indexPath: NSIndexPath) {
-        if indexPath.section == 1{
+        if indexPath.section == 2{
             APP.curFoldername = APP.curAccount!.folders![indexPath.row].name
             let title =  Utility.chineseFromEnglish(APP.curFoldername)
             self.setTitle(title)
             
             self.updateTableView()
         }else{
-            print(APP.curAccount!.username)
+            //print(APP.curAccount!.username)
         }
     }
     
     func menuView(view: MenuView, titleForHeaderInSection section: Int) -> String? {
-        if section == 1{
+        if section == 2{
             return "文件夹"
         }
         return nil

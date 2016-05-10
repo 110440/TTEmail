@@ -56,7 +56,16 @@ class EmailCell: UITableViewCell {
     
     func setData(data:EmailMessage) {
         self.titleLab.text = data.subject
-        self.nameLab.text = data.displayName
+        var name = data.displayName
+        if data.readed <= 0{
+            name = "● " + name
+            let str = NSMutableAttributedString(string: name)
+            let range = NSRange(location: 0, length: 1)
+            str.addAttribute(NSForegroundColorAttributeName, value: UIColor.blueColor(), range: range)
+            self.nameLab.attributedText = str
+        }else{
+            self.nameLab.text = name
+        }
         
         dispatch_async(dispatch_get_global_queue(QOS_CLASS_DEFAULT, 0)){
             let name = data.displayName.substringToIndex(data.displayName.startIndex.advancedBy(2))

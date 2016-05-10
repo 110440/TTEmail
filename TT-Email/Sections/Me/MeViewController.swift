@@ -12,7 +12,6 @@ class MeViewController: UITableViewController {
         
     override func viewDidLoad() {
         super.viewDidLoad()
-        //self.hidesBottomBarWhenPushed = true
         self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
     }
 
@@ -59,6 +58,7 @@ class MeViewController: UITableViewController {
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if indexPath.section == 1 {
             let vc = AddAccountViewController(style: .Grouped)
+            vc.hidesBottomBarWhenPushed = true
             self.navigationController?.pushViewController(vc, animated: true)
         }else{
             let account = APP.accountStore.allAccount[indexPath.row]

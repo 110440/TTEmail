@@ -102,7 +102,7 @@ class EmailDetailViewController: UIViewController ,UIWebViewDelegate {
                 }
             }
         })
-
+        
     }
     
     deinit{

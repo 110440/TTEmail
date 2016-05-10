@@ -204,6 +204,7 @@ class MenuView: UIView ,UITableViewDataSource ,UITableViewDelegate{
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("cell",forIndexPath: indexPath)
         self.delegate?.menuView(self, willShowCell: cell, indexPath: indexPath)
+        cell.selectionStyle = .Blue
         return cell
     }
 

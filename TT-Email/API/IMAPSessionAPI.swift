@@ -139,7 +139,7 @@ class IMAPSessionAPI{
         return operation!
     }
     
-    // 设置讯标志
+    // 设置读标志
     static func setReaded(session:MCOIMAPSession ,readed:Bool,uid:UInt32,foldername:String,completion:(error:NSError?)->Void)->MCOIMAPBaseOperation{
         let uids = MCOIndexSet(index:UInt64(uid))
         let kind:MCOIMAPStoreFlagsRequestKind = readed ? .Set : .Remove

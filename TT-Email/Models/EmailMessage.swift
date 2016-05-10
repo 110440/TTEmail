@@ -16,6 +16,7 @@ class EmailMessage {
     //var summaryText:String?
     //var htmlBody:String?
     var time:Double
+    var readed:Int = 0
     
     init(uid:UInt32, subject:String,displayName:String,time:Double){
         self.uid = uid
@@ -30,6 +31,7 @@ class EmailMessage {
         self.displayName = dic["displayName"] as! String
         self.time = (dic["time"] as! NSNumber).doubleValue
         //self.htmlBody = dic["htmlBody"] as? String
+        self.readed = (dic["readed"] as? NSNumber)?.integerValue ?? 0
     }
     
     func toDictionry()->NSMutableDictionary{
@@ -40,6 +42,7 @@ class EmailMessage {
         dic["displayName"] = self.displayName
         dic["time"] = NSNumber(double: self.time)
         //dic["htmlBody"] = self.htmlBody
+        dic["readed"] = NSNumber(integer: self.readed)
         return dic
     }
     

@@ -122,6 +122,9 @@ class MessageStore {
                 for message in messages!{
                     let date = message.header.date.timeIntervalSince1970
                     let emailMsg = EmailMessage(uid: message.uid, subject: message.header.subject, displayName: message.header.from.displayName,time:date)
+                    if message.flags.rawValue & MCOMessageFlag.Seen.rawValue > 0{
+                        emailMsg.readed = 1
+                    }
                     emailMessages.append(emailMsg)
                 }
                 emailMessages = emailMessages.reverse()
@@ -266,5 +269,9 @@ class MessageStore {
         }
     }
     
-    
+    func setMessageReaded(uid:UInt32,readed:Bool,completion:(error:NSError?)->Void){
+        IMAPSessionAPI.setReaded(APP.curAccount!.IMAPSession, readed: readed, uid: uid, foldername: APP.curFoldername) { (error) in
+            completion(error: error)
+        }
+    }
 }
